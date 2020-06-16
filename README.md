@@ -11,4 +11,4 @@ Provides an example of how to create a gif using:
 
 **Example of resulting output:**
 
-![]("many-model-performance.gif")
+![Example gif](many-model-performance.gif)
