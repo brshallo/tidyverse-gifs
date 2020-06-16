@@ -2,10 +2,10 @@ library(tidyverse)
 library(magick)
 
 # create pdf of slides
-pagedown::chrome_print("xarigan-slides-example.Rmd")
+pagedown::chrome_print("xaringan-slides-example.Rmd")
 
 # load slides as images
-images <- image_read_pdf("xarigan-slides-example.pdf", density = 100)
+images <- image_read_pdf("xaringan-slides-example.pdf", density = 100)
 
 # crop, transform images, render to gif
 images %>% 

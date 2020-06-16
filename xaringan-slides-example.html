@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>xaringan-slides-example.utf8.md</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+                                    font-size: 60%;
+                                  }
+&lt;/style&gt;
+
+
+
+.pull-left[
+
+```r
+gapminder
+```
+]
+
+.pull-right[
+
+```
+## # A tibble: 1,704 x 6
+##    country     continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779.
+##  2 Afghanistan Asia       1957    30.3  9240934      821.
+##  3 Afghanistan Asia       1962    32.0 10267083      853.
+##  4 Afghanistan Asia       1967    34.0 11537966      836.
+##  5 Afghanistan Asia       1972    36.1 13079460      740.
+##  6 Afghanistan Asia       1977    38.4 14880372      786.
+##  7 Afghanistan Asia       1982    39.9 12881816      978.
+##  8 Afghanistan Asia       1987    40.8 13867957      852.
+##  9 Afghanistan Asia       1992    41.7 16317921      649.
+## 10 Afghanistan Asia       1997    41.8 22227415      635.
+## # ... with 1,694 more rows
+```
+]
+
+---
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;gapminder %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style='background-color:#ffff7f'&gt;group_by&lt;/span&gt;(country, continent) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style='background-color:#ffff7f'&gt;nest&lt;/span&gt;()&lt;/code&gt;
+]
+
+.pull-right[
+
+```
+## # A tibble: 142 x 3
+## # Groups:   country, continent [710]
+##    country     continent data             
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;list&gt;           
+##  1 Afghanistan Asia      &lt;tibble [12 x 4]&gt;
+##  2 Albania     Europe    &lt;tibble [12 x 4]&gt;
+##  3 Algeria     Africa    &lt;tibble [12 x 4]&gt;
+##  4 Angola      Africa    &lt;tibble [12 x 4]&gt;
+##  5 Argentina   Americas  &lt;tibble [12 x 4]&gt;
+##  6 Australia   Oceania   &lt;tibble [12 x 4]&gt;
+##  7 Austria     Europe    &lt;tibble [12 x 4]&gt;
+##  8 Bahrain     Asia      &lt;tibble [12 x 4]&gt;
+##  9 Bangladesh  Asia      &lt;tibble [12 x 4]&gt;
+## 10 Belgium     Europe    &lt;tibble [12 x 4]&gt;
+## # ... with 132 more rows
+```
+]
+
+---
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;gapminder %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(country, continent) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;nest() %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style='background-color:#ffff7f'&gt;mutate&lt;/span&gt;(model = map(data, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;~lm(lifeExp ~ year, data = .x)),&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;results = map(model, broom::glance))&lt;/code&gt;
+]
+
+.pull-right[
+
+```
+## # A tibble: 142 x 5
+## # Groups:   country, continent [710]
+##    country     continent data              model  results          
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;list&gt;            &lt;list&gt; &lt;list&gt;           
+##  1 Afghanistan Asia      &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+##  2 Albania     Europe    &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+##  3 Algeria     Africa    &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+##  4 Angola      Africa    &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+##  5 Argentina   Americas  &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+##  6 Australia   Oceania   &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+##  7 Austria     Europe    &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+##  8 Bahrain     Asia      &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+##  9 Bangladesh  Asia      &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+## 10 Belgium     Europe    &lt;tibble [12 x 4]&gt; &lt;lm&gt;   &lt;tibble [1 x 11]&gt;
+## # ... with 132 more rows
+```
+]
+
+---
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;gapminder %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(country, continent) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;nest() %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;mutate(model = map(data, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;~lm(lifeExp ~ year, data = .x)),&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;results = map(model, broom::glance)) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style='background-color:#ffff7f'&gt;unnest&lt;/span&gt;(results)&lt;/code&gt;
+]
+
+.pull-right[
+
+```
+## # A tibble: 142 x 15
+## # Groups:   country, continent [710]
+##    country continent data  model r.squared adj.r.squared sigma statistic
+##    &lt;fct&gt;   &lt;fct&gt;     &lt;lis&gt; &lt;lis&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Afghan~ Asia      &lt;tib~ &lt;lm&gt;      0.948         0.942 1.22      181. 
+##  2 Albania Europe    &lt;tib~ &lt;lm&gt;      0.911         0.902 1.98      102. 
+##  3 Algeria Africa    &lt;tib~ &lt;lm&gt;      0.985         0.984 1.32      662. 
+##  4 Angola  Africa    &lt;tib~ &lt;lm&gt;      0.888         0.877 1.41       79.1
+##  5 Argent~ Americas  &lt;tib~ &lt;lm&gt;      0.996         0.995 0.292    2246. 
+##  6 Austra~ Oceania   &lt;tib~ &lt;lm&gt;      0.980         0.978 0.621     481. 
+##  7 Austria Europe    &lt;tib~ &lt;lm&gt;      0.992         0.991 0.407    1261. 
+##  8 Bahrain Asia      &lt;tib~ &lt;lm&gt;      0.967         0.963 1.64      291. 
+##  9 Bangla~ Asia      &lt;tib~ &lt;lm&gt;      0.989         0.988 0.977     930. 
+## 10 Belgium Europe    &lt;tib~ &lt;lm&gt;      0.995         0.994 0.293    1822. 
+## # ... with 132 more rows, and 7 more variables: p.value &lt;dbl&gt;, df &lt;int&gt;,
+## #   logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;, deviance &lt;dbl&gt;, df.residual &lt;int&gt;
+```
+]
+---
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;gapminder %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(country, continent) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;nest() %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;mutate(model = map(data, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;~lm(lifeExp ~ year, data = .x)),&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;results = map(model, broom::glance)) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;unnest(results) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style='background-color:#ffff7f'&gt;ggplot&lt;/span&gt;(aes(x = continent, y = r.squared)) +&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style='background-color:#ffff7f'&gt;ggbeeswarm::geom_quasirandom&lt;/span&gt;()&lt;/code&gt;
+]
+
+.pull-right[
+![](xaringan-slides-example_files/figure-html/plot-results-1.png)&lt;!-- --&gt;
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
