@@ -1,0 +1,128 @@
+---
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{css, echo = FALSE}
+.remark-slide-content {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+                                    font-size: 60%;
+                                  }
+```
+
+```{r include = FALSE}
+library(tidyverse)
+library(flair)
+library(gapminder)
+```
+
+.pull-left[
+```{r, echo = TRUE, eval = FALSE}
+gapminder
+```
+]
+
+.pull-right[
+```{r, echo = FALSE}
+gapminder
+```
+]
+
+---
+
+.pull-left[
+```{r, echo = FALSE}
+flair::decorate_chunk("nest", eval = FALSE) %>% 
+  flair("group_by") %>% 
+  flair("nest")
+```
+]
+
+.pull-right[
+```{r nest, echo = FALSE}
+gapminder %>% 
+  group_by(country, continent) %>% 
+  nest()
+```
+]
+
+---
+
+.pull-left[
+```{r, echo = FALSE}
+flair::decorate_chunk("mutate", eval = FALSE) %>% 
+  flair("mutate")
+```
+]
+
+.pull-right[
+```{r mutate, echo = FALSE}
+gapminder %>% 
+  group_by(country, continent) %>% 
+  nest() %>% 
+  mutate(model = map(data, 
+                     ~lm(lifeExp ~ year, data = .x)),
+         results = map(model, broom::glance))
+```
+]
+
+---
+
+.pull-left[
+```{r, echo = FALSE}
+flair::decorate_chunk("unnest", eval = FALSE) %>% 
+  flair("unnest")
+```
+]
+
+.pull-right[
+```{r unnest, echo = FALSE}
+gapminder %>% 
+  group_by(country, continent) %>% 
+  nest() %>% 
+  mutate(model = map(data, 
+                     ~lm(lifeExp ~ year, data = .x)),
+         results = map(model, broom::glance)) %>% 
+  unnest(results)
+```
+]
+---
+
+.pull-left[
+```{r, echo = FALSE}
+flair::decorate_chunk("plot-results", eval = FALSE) %>% 
+  flair("ggplot") %>% 
+  flair("ggbeeswarm::geom_quasirandom")
+```
+]
+
+.pull-right[
+```{r plot-results, echo = FALSE}
+gapminder %>% 
+  group_by(country, continent) %>% 
+  nest() %>% 
+  mutate(model = map(data, 
+                     ~lm(lifeExp ~ year, data = .x)),
+         results = map(model, broom::glance)) %>% 
+  unnest(results) %>% 
+  ggplot(aes(x = continent, y = r.squared)) +
+  ggbeeswarm::geom_quasirandom()
+```
+]
