@@ -12,3 +12,10 @@ Provides an example of how to create a gif using:
 **Example of resulting output:**
 
 ![Example gif](many-model-performance.gif)
+
+**Improved method:**
+
+I posted an easier approach (largely superseding this one) that uses:
+
+`flipbookr` --> `pagedown` --> `magick` to create types of gifs in a way that does not require nearly as much copying and pasting of code [brshallo/flipbookr-gifs-examples](https://github.com/brshallo/flipbookr-gifs-examples).
+
